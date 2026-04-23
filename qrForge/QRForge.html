@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>QR Forge Pro | Perfect Logo Integration</title>
+    <link rel="alternate icon" href="img/qrlogotab.png" type="image/png">
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .forge-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .design-panel {
+            flex: 1.2;
+            min-width: 300px;
+            background: #f8fafc;
+            padding: 2rem;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .preview-panel {
+            flex: 1;
+            background: white;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section {
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #334155;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .color-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .color-row > div {
+            flex: 1;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            background: #fefefe;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+            transform: scale(1.02);
+        }
+
+        .img-preview {
+            margin-top: 1rem;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid #e2e8f0;
+            padding: 5px;
+        }
+
+        .qr-stage {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        #qrCanvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 1rem;
+            max-width: 350px;
+            height: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        input[type="range"] {
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .value-display {
+            font-size: 0.75rem;
+            color: #667eea;
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 800px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            .design-panel {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+
+        .status-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .logo-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .logo-controls button {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        #clearLogoBtn {
+            background: #ef4444;
+        }
+
+        #resetLogoBtn {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="forge-container">
+    <div class="dashboard">
+        <div class="design-panel">
+            <h2>
+                <img src="img/qrlogotab.png" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;"> QR Forge Pro
+            </h2>
+            
+            <div class="section">
+                <div class="section-title">🔗 Content</div>
+                <label>URL or Text</label>
+                <input type="text" id="qrData" placeholder="https:// or any text..." value="https://qrcode.demo/">
+            </div>
+
+            <div class="section">
+                <div class="section-title">🖼️ Center Logo</div>
+                <div class="upload-area" id="logoUploadTrigger">
+                    <span style="font-size: 2rem;">☁️</span>
+                    <p style="margin-top: 0.5rem; color:#475569;">Click or drag to upload logo</p>
+                    <small style="color:#94a3b8;">PNG, JPG, WEBP (transparent background recommended)</small>
+                    <input type="file" id="logoInput" accept="image/png, image/jpeg, image/jpg, image/webp" style="display: none;">
+                </div>
+                <div style="display: flex; justify-content: center; margin-top: 10px;">
+                    <img id="logoPreview" class="img-preview" alt="logo preview">
+                </div>
+                <div class="logo-controls">
+                    <button id="clearLogoBtn">🗑️ Remove</button>
+                    <button id="resetLogoBtn">↩️ Reset Position</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎨 Design Settings</div>
+                <div class="color-row">
+                    <div>
+                        <label>QR Color</label>
+                        <input type="color" id="fgColor" value="#1e293b">
+                    </div>
+                    <div>
+                        <label>Background</label>
+                        <input type="color" id="bgColor" value="#FFFFFF">
+                    </div>
+                </div>
+                <label>Logo Size: <span id="sizePercent">20</span>%</label>
+                <input type="range" id="logoSize" min="10" max="35" step="1" value="20">
+                <div class="value-display">
+                    ℹ️ Larger logo may affect scanability
+                </div>
+            </div>
+            
+            <button id="generateBtn">🔄 Generate QR Code</button>
+            <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 1rem; text-align: center;">
+                🛡️ High error correction (H-Level) for reliable scanning with logo
+            </p>
+        </div>
+
+        <div class="preview-panel">
+            <div class="qr-stage">
+                <canvas id="qrCanvas" width="350" height="350"></canvas>
+            </div>
+            <div class="download-buttons">
+                <button id="downloadPngBtn">⬇️ Download PNG</button>
+            </div>
+            <div class="badge">
+                ✨ Professional QR codes with perfect logo integration
+            </div>
+        </div>
+    </div>
+    <footer style="text-align:center; padding:16px; font-size:14px; border-top:1px solid #e2e8f0; background:#f8fafc;">
+      <span style="color:#777;">© 2026 QR Forge Pro.</span>
+      <a href="https://github.com/iDoNUT22" target="_blank"
+         style="margin-left:8px; padding:6px 14px; border-radius:999px;
+                background:#111; color:#fff; text-decoration:none;">
+        🐙 iDoNUT22
+      </a>
+    </footer>
+</div>
+
+<div id="statusMessage" class="status-message"></div>
+
+<script>
+    // DOM Elements
+    const qrCanvas = document.getElementById('qrCanvas');
+    const qrDataInput = document.getElementById('qrData');
+    const fgColorPicker = document.getElementById('fgColor');
+    const bgColorPicker = document.getElementById('bgColor');
+    const logoSizeSlider = document.getElementById('logoSize');
+    const sizePercent = document.getElementById('sizePercent');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadPngBtn = document.getElementById('downloadPngBtn');
+    const logoInput = document.getElementById('logoInput');
+    const logoPreview = document.getElementById('logoPreview');
+    const clearLogoBtn = document.getElementById('clearLogoBtn');
+    const resetLogoBtn = document.getElementById('resetLogoBtn');
+    const uploadTrigger = document.getElementById('logoUploadTrigger');
+
+    // State variables
+    let currentLogoImage = null;
+    let currentLogoDataURL = null;
+    let originalQRImageData = null; // Store original QR without logo
+    let isGenerating = false;
+
+    // Show status message
+    function showMessage(text, isError = false) {
+        const msgDiv = document.getElementById('statusMessage');
+        msgDiv.textContent = text;
+        msgDiv.style.backgroundColor = isError ? '#ef4444' : '#10b981';
+        msgDiv.style.display = 'block';
+        setTimeout(() => {
+            msgDiv.style.display = 'none';
+        }, 2500);
+    }
+
+    // Generate QR Code without logo (base layer)
+    async function generateBaseQR() {
+        const data = qrDataInput.value.trim();
+        if (!data) {
+            showMessage('Please enter a URL or text', true);
+            return false;
+        }
+
+        const fgColor = fgColorPicker.value;
+        const bgColor = bgColorPicker.value;
+        
+        try {
+            const opts = {
+                width: 350,
+                margin: 2,
+                color: {
+                    dark: fgColor,
+                    light: bgColor
+                },
+                errorCorrectionLevel: 'H'
+            };
+
+            await QRCode.toCanvas(qrCanvas, data, opts);
+            
+            // Store the original QR image data
+            originalQRImageData = qrCanvas.toDataURL();
+            return true;
+        } catch (error) {
+            console.error('QR Generation Error:', error);
+            showMessage('Error generating QR code. Check the content.', true);
+            return false;
+        }
+    }
+
+    // Draw logo on QR code with proper positioning
+    function drawLogoOnQR() {
+        if (!currentLogoImage || !originalQRImageData) {
+            return false;
+        }
+
+        try {
+            // Create a temporary image from the stored QR data
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                // Clear canvas and draw the QR code
+                const ctx = qrCanvas.getContext('2d');
+                ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+                ctx.drawImage(tempImg, 0, 0, qrCanvas.width, qrCanvas.height);
+                
+                // Calculate logo dimensions
+                const logoSizePercent = parseInt(logoSizeSlider.value) / 100;
+                const logoWidth = qrCanvas.width * logoSizePercent;
+                const logoHeight = qrCanvas.height * logoSizePercent;
+                const x = (qrCanvas.width - logoWidth) / 2;
+                const y = (qrCanvas.height - logoHeight) / 2;
+                
+                // Draw white background circle for better visibility
+                ctx.save();
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(qrCanvas.width/2, qrCanvas.height/2, logoWidth/2 + 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add subtle border
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(qrCanvas.width/2, qrCanvas.height/2, logoWidth/2 + 6, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Draw the logo
+                ctx.drawImage(currentLogoImage, x, y, logoWidth, logoHeight);
+                
+                // Add inner shadow effect for depth
+                ctx.shadowBlur = 0;
+                ctx.restore();
+            };
+            tempImg.src = originalQRImageData;
+            return true;
+        } catch (error) {
+            console.error('Logo drawing error:', error);
+            return false;
+        }
+    }
+
+    // Main function to generate complete QR with logo
+    async function generateCompleteQR() {
+        if (isGenerating) return;
+        isGenerating = true;
+        
+        const success = await generateBaseQR();
+        
+        if (success && currentLogoImage) {
+            // Small delay to ensure QR is fully rendered
+            setTimeout(() => {
+                drawLogoOnQR();
+                isGenerating = false;
+            }, 50);
+        } else {
+            isGenerating = false;
+        }
+        
+        if (success) {
+            showMessage('QR Code generated successfully!');
+        }
+    }
+
+    // Handle logo upload with proper loading
+    function handleLogoUpload(file) {
+        if (!file) return;
+        
+        const allowed = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+        if (!allowed.includes(file.type)) {
+            showMessage('Please upload PNG, JPG, or WEBP image', true);
+            return;
+        }
+        
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            showMessage('Logo file too large (max 2MB)', true);
+            return;
+        }
+        
+        showMessage('Loading logo...');
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            currentLogoDataURL = e.target.result;
+            logoPreview.src = currentLogoDataURL;
+            logoPreview.style.display = 'block';
+            
+            // Load image properly
+            const img = new Image();
+            img.onload = () => {
+                currentLogoImage = img;
+                // Regenerate QR with new logo
+                generateCompleteQR();
+                showMessage('Logo added successfully!');
+            };
+            img.onerror = () => {
+                showMessage('Error loading logo image - invalid format', true);
+                currentLogoImage = null;
+                currentLogoDataURL = null;
+                logoPreview.style.display = 'none';
+            };
+            img.src = currentLogoDataURL;
+        };
+        reader.onerror = () => {
+            showMessage('Error reading file', true);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Clear logo completely
+    function clearLogo() {
+        currentLogoImage = null;
+        currentLogoDataURL = null;
+        logoPreview.src = '';
+        logoPreview.style.display = 'none';
+        logoInput.value = '';
+        
+        // Regenerate QR without logo
+        generateBaseQR().then(() => {
+            showMessage('Logo removed');
+        });
+    }
+
+    // Reset logo position and redraw
+    function resetLogoPosition() {
+        if (currentLogoImage && originalQRImageData) {
+            drawLogoOnQR();
+            showMessage('Logo position reset');
+        } else if (currentLogoImage) {
+            generateCompleteQR();
+        }
+    }
+
+    // Download QR as PNG
+    function downloadPNG() {
+        if (!qrCanvas) {
+            showMessage('Generate a QR code first', true);
+            return;
+        }
+        
+        try {
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            link.download = `qrcode_${timestamp}.png`;
+            link.href = qrCanvas.toDataURL('image/png');
+            link.click();
+            showMessage('QR Code downloaded successfully!');
+        } catch (error) {
+            console.error('Download error:', error);
+            showMessage('Error downloading QR code', true);
+        }
+    }
+
+    // Update logo size display and redraw
+    function updateLogoSize() {
+        const size = logoSizeSlider.value;
+        sizePercent.textContent = size;
+        if (currentLogoImage && originalQRImageData) {
+            drawLogoOnQR();
+        }
+    }
+
+    // Event Listeners
+    generateBtn.addEventListener('click', generateCompleteQR);
+    downloadPngBtn.addEventListener('click', downloadPNG);
+    
+    // Live preview on design changes
+    fgColorPicker.addEventListener('input', () => {
+        if (currentLogoImage) {
+            generateBaseQR().then(() => {
+                drawLogoOnQR();
+            });
+        } else {
+            generateBaseQR();
+        }
+    });
+    
+    bgColorPicker.addEventListener('input', () => {
+        if (currentLogoImage) {
+            generateBaseQR().then(() => {
+                drawLogoOnQR();
+            });
+        } else {
+            generateBaseQR();
+        }
+    });
+    
+    logoSizeSlider.addEventListener('input', updateLogoSize);
+    qrDataInput.addEventListener('input', generateCompleteQR);
+    
+    // Logo upload triggers with improved UX
+    uploadTrigger.addEventListener('click', () => {
+        logoInput.click();
+    });
+    
+    logoInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+            handleLogoUpload(e.target.files[0]);
+        }
+    });
+    
+    clearLogoBtn.addEventListener('click', clearLogo);
+    resetLogoBtn.addEventListener('click', resetLogoPosition);
+    
+    // Drag and drop functionality
+    uploadTrigger.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadTrigger.style.borderColor = '#667eea';
+        uploadTrigger.style.background = '#f1f5f9';
+    });
+    
+    uploadTrigger.addEventListener('dragleave', () => {
+        uploadTrigger.style.borderColor = '#cbd5e1';
+        uploadTrigger.style.background = '#fefefe';
+    });
+    
+    uploadTrigger.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadTrigger.style.borderColor = '#cbd5e1';
+        uploadTrigger.style.background = '#fefefe';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleLogoUpload(files[0]);
+        }
+    });
+    
+    // Initial generation
+    setTimeout(() => {
+        generateBaseQR().then(() => {
+            console.log('QR Forge Pro ready!');
+        });
+    }, 100);
+</script>
+</body>
+</html>
