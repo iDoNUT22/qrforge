@@ -8,7 +8,7 @@ Designed with a clean UI and real-time customization for developers, designers, 
 
 ## 🚀 Live Demo
 
-* 🌐 Try it here: **[https://your-live-link-here.com](https://your-live-link-here.com)**
+* 🌐 Try it here: **[https://your-live-link-here.com](https://qrforgepro.netlify.app/)**
 
 ---
 
